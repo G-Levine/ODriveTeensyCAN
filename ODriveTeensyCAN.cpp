@@ -134,20 +134,50 @@ float ODriveTeensyCAN::GetVelocity(int axis_id) {
     return output;
 }
 
-float ODriveTeensyCAN::GetMotorError(int axis_id) {
-    byte msg_data[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+uint32_t ODriveTeensyCAN::GetMotorError(int axis_id) {
+    byte msg_data[4] = {0, 0, 0, 0};
 
-    sendMessage(axis_id, CMD_ID_GET_MOTOR_ERROR, true, 8, msg_data);
+    sendMessage(axis_id, CMD_ID_GET_MOTOR_ERROR, true, 4, msg_data);
 
-    return (uint32_t) msg_data;
+    uint32_t output;
+    *((uint8_t *)(&output) + 0) = msg_data[0];
+    *((uint8_t *)(&output) + 1) = msg_data[1];
+    *((uint8_t *)(&output) + 2) = msg_data[2];
+    *((uint8_t *)(&output) + 3) = msg_data[3];
+    return output;
 }
 
-float ODriveTeensyCAN::GetEncoderError(int axis_id) {
+uint32_t ODriveTeensyCAN::GetEncoderError(int axis_id) {
+    byte msg_data[4] = {0, 0, 0, 0};
+
+    sendMessage(axis_id, CMD_ID_GET_ENCODER_ERROR, true, 4, msg_data);
+
+    uint32_t output;
+    *((uint8_t *)(&output) + 0) = msg_data[0];
+    *((uint8_t *)(&output) + 1) = msg_data[1];
+    *((uint8_t *)(&output) + 2) = msg_data[2];
+    *((uint8_t *)(&output) + 3) = msg_data[3];
+    return output;
+}
+
+uint32_t ODriveTeensyCAN::GetAxisError(int axis_id) {
     byte msg_data[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+    uint32_t output;
 
-    sendMessage(axis_id, CMD_ID_GET_ENCODER_ERROR, true, 8, msg_data);
+    CAN_message_t return_msg;
 
-    return (uint32_t) msg_data;
+    int msg_id = (axis_id << CommandIDLength) + CMD_ID_CANOPEN_HEARTBEAT_MESSAGE;
+
+    while (true) {
+        if (Can0.read(return_msg) && (return_msg.id == msg_id)) {
+            memcpy(msg_data, return_msg.buf, sizeof(return_msg.buf));
+            *((uint8_t *)(&output) + 0) = msg_data[0];
+            *((uint8_t *)(&output) + 1) = msg_data[1];
+            *((uint8_t *)(&output) + 2) = msg_data[2];
+            *((uint8_t *)(&output) + 3) = msg_data[3];
+            return output;
+        }
+    }
 }
 
 bool ODriveTeensyCAN::RunState(int axis_id, int requested_state) {

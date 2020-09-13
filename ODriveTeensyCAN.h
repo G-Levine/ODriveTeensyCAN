@@ -61,8 +61,9 @@ public:
     // Getters
     float GetPosition(int axis_id);
     float GetVelocity(int axis_id);
-    float GetMotorError(int axis_id);
-    float GetEncoderError(int axis_id);
+    uint32_t GetMotorError(int axis_id);
+    uint32_t GetEncoderError(int axis_id);
+    uint32_t GetAxisError(int axis_id);
 
     // State helper
     bool RunState(int axis_id, int requested_state);
