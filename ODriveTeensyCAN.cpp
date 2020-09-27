@@ -22,7 +22,7 @@ static const int CANBaudRate = 250000;
 template<class T> inline Print& operator <<(Print &obj,     T arg) { obj.print(arg);    return obj; }
 template<>        inline Print& operator <<(Print &obj, float arg) { obj.print(arg, 4); return obj; }
 
-FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can0;
+FlexCAN_T4<CAN0, RX_SIZE_256, TX_SIZE_16> Can0;
 // FlexCAN_T4<CAN3, RX_SIZE_256, TX_SIZE_16> Can0;
 
 ODriveTeensyCAN::ODriveTeensyCAN() {
@@ -166,7 +166,7 @@ uint32_t ODriveTeensyCAN::GetAxisError(int axis_id) {
 
     CAN_message_t return_msg;
 
-    int msg_id = (axis_id << CommandIDLength) + CMD_ID_CANOPEN_HEARTBEAT_MESSAGE;
+    int msg_id = (axis_id << CommandIDLength) + CMD_ID_ODRIVE_HEARTBEAT_MESSAGE;
 
     while (true) {
         if (Can0.read(return_msg) && (return_msg.id == msg_id)) {
