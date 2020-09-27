@@ -180,6 +180,26 @@ uint32_t ODriveTeensyCAN::GetAxisError(int axis_id) {
     }
 }
 
+uint32_t ODriveTeensyCAN::GetCurrentState(int axis_id) {
+    byte msg_data[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+    uint32_t output;
+
+    CAN_message_t return_msg;
+
+    int msg_id = (axis_id << CommandIDLength) + CMD_ID_ODRIVE_HEARTBEAT_MESSAGE;
+
+    while (true) {
+        if (Can0.read(return_msg) && (return_msg.id == msg_id)) {
+            memcpy(msg_data, return_msg.buf, sizeof(return_msg.buf));
+            *((uint8_t *)(&output) + 0) = msg_data[4];
+            *((uint8_t *)(&output) + 1) = msg_data[5];
+            *((uint8_t *)(&output) + 2) = msg_data[6];
+            *((uint8_t *)(&output) + 3) = msg_data[7];
+            return output;
+        }
+    }
+}
+
 bool ODriveTeensyCAN::RunState(int axis_id, int requested_state) {
     sendMessage(axis_id, CMD_ID_SET_AXIS_REQUESTED_STATE, false, 4, (byte*) &requested_state);
     return true;
