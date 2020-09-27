@@ -1,0 +1,27 @@
+#############################
+#	Data Types - KEYWORD1	#
+#############################
+
+
+
+#############################
+#	Functions - KEYWORD2	#
+#############################
+
+SetPosition	KEYWORD1
+SetVelocity	KEYWORD1
+SetTorque	KEYWORD1
+GetPosition	KEYWORD1
+GetVelocity	KEYWORD1
+GetMotorError	KEYWORD1
+GetEncoderError	KEYWORD1
+GetAxisError	KEYWORD1
+GetCurrentState	KEYWORD1
+RunState	KEYWORD1
+
+
+#############################
+#	Instances - KEYWORD2	#
+#############################
+
+ODriveTeensyCAN	KEYWORD2
