@@ -166,7 +166,7 @@ uint32_t ODriveTeensyCAN::GetAxisError(int axis_id) {
 
     CAN_message_t return_msg;
 
-    int msg_id = (axis_id << CommandIDLength) + CMD_ID_CANOPEN_HEARTBEAT_MESSAGE;
+    int msg_id = (axis_id << CommandIDLength) + CMD_ID_ODRIVE_HEARTBEAT_MESSAGE;
 
     while (true) {
         if (Can0.read(return_msg) && (return_msg.id == msg_id)) {
