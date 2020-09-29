@@ -52,6 +52,10 @@ void ODriveTeensyCAN::sendMessage(int axis_id, int cmd_id, bool remote_transmiss
     }
 }
 
+int ODriveTeensyCAN::available() {
+  return ( (*(vuint32_t*)(0x40024000L+0x30)) & 0x00000020)? 1:0;
+}
+
 void ODriveTeensyCAN::SetPosition(int axis_id, float position) {
     SetPosition(axis_id, position, 0.0f, 0.0f);
 }
@@ -100,6 +104,12 @@ void ODriveTeensyCAN::SetVelocity(int axis_id, float velocity, float current_fee
     msg_data[7] = current_feedforward_b[3];
     
     sendMessage(axis_id, CMD_ID_SET_INPUT_VEL, false, 8, velocity_b);
+}
+
+void ODriveTeensyCAN::SetVelocityLimit(int axis_id, float velocity_limit) {
+    byte* velocity_limit_b = (byte*) &velocity_limit;
+
+    sendMessage(axis_id, CMD_ID_SET_VELOCITY_LIMIT, false, 4, velocity_limit_b);
 }
 
 void ODriveTeensyCAN::SetTorque(int axis_id, float torque) {

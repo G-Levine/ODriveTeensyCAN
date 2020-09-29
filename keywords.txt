@@ -10,6 +10,7 @@
 
 SetPosition	KEYWORD1
 SetVelocity	KEYWORD1
+SetVelocityLimit	KEYWORD1
 SetTorque	KEYWORD1
 GetPosition	KEYWORD1
 GetVelocity	KEYWORD1

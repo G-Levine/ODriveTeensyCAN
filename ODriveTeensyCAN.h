@@ -49,6 +49,9 @@ public:
     ODriveTeensyCAN();
 
     void sendMessage(int axis_id, int cmd_id, bool remote_transmission_request, int length, byte *signal_bytes);
+	
+	//Available
+	int available();
 
     // Commands
     void SetPosition(int axis_id, float position);
@@ -56,6 +59,7 @@ public:
     void SetPosition(int axis_id, float position, float velocity_feedforward, float current_feedforward);
     void SetVelocity(int axis_id, float velocity);
     void SetVelocity(int axis_id, float velocity, float current_feedforward);
+	void SetVelocityLimit(int axis_id, float velocity_limit);
     void SetTorque(int axis_id, float torque);
 
     // Getters
