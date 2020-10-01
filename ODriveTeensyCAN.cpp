@@ -52,10 +52,6 @@ void ODriveTeensyCAN::sendMessage(int axis_id, int cmd_id, bool remote_transmiss
     }
 }
 
-int ODriveTeensyCAN::available() {
-  return ( (*(vuint32_t*)(0x40024000L+0x30)) & 0x00000020)? 1:0;
-}
-
 void ODriveTeensyCAN::SetPosition(int axis_id, float position) {
     SetPosition(axis_id, position, 0.0f, 0.0f);
 }
