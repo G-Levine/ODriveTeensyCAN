@@ -50,7 +50,8 @@ public:
 
     void sendMessage(int axis_id, int cmd_id, bool remote_transmission_request, int length, byte *signal_bytes);
 	
-	//Available
+	//Heartbeat
+	int heartbeat();
 
     // Commands
     void SetPosition(int axis_id, float position);
@@ -60,6 +61,7 @@ public:
     void SetVelocity(int axis_id, float velocity, float current_feedforward);
 	void SetVelocityLimit(int axis_id, float velocity_limit);
     void SetTorque(int axis_id, float torque);
+	void ClearErrors(int axis_id);
 
     // Getters
     float GetPosition(int axis_id);

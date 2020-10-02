@@ -52,6 +52,12 @@ void ODriveTeensyCAN::sendMessage(int axis_id, int cmd_id, bool remote_transmiss
     }
 }
 
+int ODriveTeensyCAN::heartbeat() {
+    CAN_message_t return_msg;
+	Can0.read(return_msg);
+	return (int)(return_msg.id >> 5);
+}
+
 void ODriveTeensyCAN::SetPosition(int axis_id, float position) {
     SetPosition(axis_id, position, 0.0f, 0.0f);
 }
@@ -112,6 +118,10 @@ void ODriveTeensyCAN::SetTorque(int axis_id, float torque) {
     byte* torque_b = (byte*) &torque;
 
     sendMessage(axis_id, CMD_ID_SET_INPUT_TORQUE, false, 4, torque_b);
+}
+
+void ODriveTeensyCAN::ClearErrors(int axis_id) {
+    sendMessage(axis_id, CMD_ID_CLEAR_ERRORS, false, 0, 0);
 }
 
 float ODriveTeensyCAN::GetPosition(int axis_id) {
