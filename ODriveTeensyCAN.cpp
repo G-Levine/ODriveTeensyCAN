@@ -52,7 +52,7 @@ void ODriveTeensyCAN::sendMessage(int axis_id, int cmd_id, bool remote_transmiss
     }
 }
 
-int ODriveTeensyCAN::heartbeat() {
+int ODriveTeensyCAN::Heartbeat() {
     CAN_message_t return_msg;
 	Can0.read(return_msg);
 	return (int)(return_msg.id >> 5);

@@ -51,7 +51,7 @@ public:
     void sendMessage(int axis_id, int cmd_id, bool remote_transmission_request, int length, byte *signal_bytes);
 	
 	//Heartbeat
-	int heartbeat();
+	int Heartbeat();
 
     // Commands
     void SetPosition(int axis_id, float position);

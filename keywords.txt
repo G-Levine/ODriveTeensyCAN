@@ -8,6 +8,7 @@
 #	Functions - KEYWORD2	#
 #############################
 
+Heartbeat	KEYWORD1
 SetPosition	KEYWORD1
 SetVelocity	KEYWORD1
 SetVelocityLimit	KEYWORD1
@@ -26,3 +27,4 @@ RunState	KEYWORD1
 #############################
 
 ODriveTeensyCAN	KEYWORD2
+
