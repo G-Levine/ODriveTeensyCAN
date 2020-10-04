@@ -52,6 +52,15 @@ void ODriveTeensyCAN::sendMessage(int axis_id, int cmd_id, bool remote_transmiss
     }
 }
 
+int ODriveTeensyCAN::Heartbeat() {
+    CAN_message_t return_msg;
+	if(Can0.read(return_msg) == 1) {
+		return (int)(return_msg.id >> 5);
+	} else {
+		return -1;
+	}
+}
+
 void ODriveTeensyCAN::SetPosition(int axis_id, float position) {
     SetPosition(axis_id, position, 0.0f, 0.0f);
 }
@@ -102,10 +111,20 @@ void ODriveTeensyCAN::SetVelocity(int axis_id, float velocity, float current_fee
     sendMessage(axis_id, CMD_ID_SET_INPUT_VEL, false, 8, velocity_b);
 }
 
+void ODriveTeensyCAN::SetVelocityLimit(int axis_id, float velocity_limit) {
+    byte* velocity_limit_b = (byte*) &velocity_limit;
+
+    sendMessage(axis_id, CMD_ID_SET_VELOCITY_LIMIT, false, 4, velocity_limit_b);
+}
+
 void ODriveTeensyCAN::SetTorque(int axis_id, float torque) {
     byte* torque_b = (byte*) &torque;
 
     sendMessage(axis_id, CMD_ID_SET_INPUT_TORQUE, false, 4, torque_b);
+}
+
+void ODriveTeensyCAN::ClearErrors(int axis_id) {
+    sendMessage(axis_id, CMD_ID_CLEAR_ERRORS, false, 0, 0);
 }
 
 float ODriveTeensyCAN::GetPosition(int axis_id) {
@@ -175,6 +194,26 @@ uint32_t ODriveTeensyCAN::GetAxisError(int axis_id) {
             *((uint8_t *)(&output) + 1) = msg_data[1];
             *((uint8_t *)(&output) + 2) = msg_data[2];
             *((uint8_t *)(&output) + 3) = msg_data[3];
+            return output;
+        }
+    }
+}
+
+uint32_t ODriveTeensyCAN::GetCurrentState(int axis_id) {
+    byte msg_data[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+    uint32_t output;
+
+    CAN_message_t return_msg;
+
+    int msg_id = (axis_id << CommandIDLength) + CMD_ID_ODRIVE_HEARTBEAT_MESSAGE;
+
+    while (true) {
+        if (Can0.read(return_msg) && (return_msg.id == msg_id)) {
+            memcpy(msg_data, return_msg.buf, sizeof(return_msg.buf));
+            *((uint8_t *)(&output) + 0) = msg_data[4];
+            *((uint8_t *)(&output) + 1) = msg_data[5];
+            *((uint8_t *)(&output) + 2) = msg_data[6];
+            *((uint8_t *)(&output) + 3) = msg_data[7];
             return output;
         }
     }

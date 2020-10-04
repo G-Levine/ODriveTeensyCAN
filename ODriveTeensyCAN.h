@@ -49,6 +49,9 @@ public:
     ODriveTeensyCAN();
 
     void sendMessage(int axis_id, int cmd_id, bool remote_transmission_request, int length, byte *signal_bytes);
+	
+	//Heartbeat
+	int Heartbeat();
 
     // Commands
     void SetPosition(int axis_id, float position);
@@ -56,7 +59,9 @@ public:
     void SetPosition(int axis_id, float position, float velocity_feedforward, float current_feedforward);
     void SetVelocity(int axis_id, float velocity);
     void SetVelocity(int axis_id, float velocity, float current_feedforward);
+	void SetVelocityLimit(int axis_id, float velocity_limit);
     void SetTorque(int axis_id, float torque);
+	void ClearErrors(int axis_id);
 
     // Getters
     float GetPosition(int axis_id);
@@ -64,6 +69,7 @@ public:
     uint32_t GetMotorError(int axis_id);
     uint32_t GetEncoderError(int axis_id);
     uint32_t GetAxisError(int axis_id);
+    uint32_t GetCurrentState(int axis_id);
 
     // State helper
     bool RunState(int axis_id, int requested_state);
