@@ -54,8 +54,11 @@ void ODriveTeensyCAN::sendMessage(int axis_id, int cmd_id, bool remote_transmiss
 
 int ODriveTeensyCAN::Heartbeat() {
     CAN_message_t return_msg;
-	Can0.read(return_msg);
-	return (int)(return_msg.id >> 5);
+	if(Can0.read(return_msg) == 1) {
+		return (int)(return_msg.id >> 5);
+	} else {
+		return -1;
+	}
 }
 
 void ODriveTeensyCAN::SetPosition(int axis_id, float position) {
